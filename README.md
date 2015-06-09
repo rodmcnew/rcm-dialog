@@ -1,7 +1,9 @@
-RCM Loading
+RCM Dialog
 ===========
 
-Javascript loading tracker.
+Javascript Angular Dialog.
 
-Allows aggregation and tracking of asynchronous events to display a loading animation
-or to track the progress on an individual event.
+- Requires bootstrap.js
+
+Allows angular dialog (bootstrap modal) to be wrapped in a directive and to use 
+display strategies.
