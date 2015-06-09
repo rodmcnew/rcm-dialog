@@ -13,7 +13,7 @@
   "license": "BSD 2",
   "dependencies": {
     "angular": "1.*",
-    "rcm-js-lib": "0.*"
+    "bootstrap": "3.*"
   },
   "devDependencies": {},
   "ignore": [
