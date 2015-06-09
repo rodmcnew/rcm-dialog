@@ -66,7 +66,7 @@ var RcmDialog = {
         dialogElm = jQuery('<div data-rcm-dialog="true"></div>');
         jQuery('body').prepend(dialogElm);
 
-        angular.element(document).injector().invoke(
+        angular.element(dialogElm).injector().invoke(
             function ($compile) {
                 var scope = angular.element(dialogElm).scope();
                 $compile(dialogElm)(scope);
@@ -511,5 +511,7 @@ angular.element(document).ready(
     }
 );
 
-rcm.addAngularModule('RcmDialog');
+if (typeof rcm !== 'undefined') {
+    rcm.addAngularModule('RcmDialog');
+}
 /** </RcmDialog> */

@@ -6,25 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>RCM Dialog Examples</title>
 
-    <link href="/modules/rcm-twitter-bootstrap/bootstrap/css/bootstrap.css"
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"
           media="screen"
           rel="stylesheet"
           type="text/css">
     <!--[if lt IE 9]>
+    <!--<script type="text/javascript"-->
+            <!--src="/modules/rcm/es5-shim-master/es5-shim.min.js"></script><![endif]&ndash;&gt;-->
     <script type="text/javascript"
-            src="/modules/rcm/es5-shim-master/es5-shim.min.js"></script><![endif]-->
-    <script type="text/javascript"
-            src="/modules/rcm-jquery/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
+            src="//code.jquery.com/jquery-1.10.2.min.js"></script>
     <script type="text/javascript"
             src="/modules/rcm-angular-js/angular/angular.js"></script>
     <script type="text/javascript"
-            src="/modules/rcm-twitter-bootstrap/bootstrap/js/bootstrap.js"></script>
+            src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <script type="text/javascript"
-            src="/modules/rcm-angular-js/ocLazyLoad/dist/ocLazyLoad.js"></script>
+            src="/vendor/rcm-js-lib/dist/rcm-guid.js"></script>
     <script type="text/javascript"
-            src="/modules/rcm/rcm-core.js"></script>
-    <script type="text/javascript"
-            src="/modules/rcm-dialog/dialog.js"></script>
+            src="/vendor/rcm-dialog/dist/rcm-dialog.min.js"></script>
 
     <style type="text/css">
         div[rcm-dialog-link] {
@@ -40,7 +38,7 @@
 
     <script type="application/javascript">
 
-        angular.module('rcmDialogTest', [])
+        angular.module('rcmDialogTest', ['RcmDialog'])
             /* @EXAMPLE */
             .controller(
                 'rcmDialogTestController',
@@ -68,11 +66,13 @@
         );
 
         // module added by RCM app
-        rcm.addAngularModule('rcmDialogTest');
+        if (typeof rcm !== 'undefined') {
+            rcm.addAngularModule('rcmDialogTest');
+        }
 
     </script>
 </head>
-<body>
+<body ng-app="rcmDialogTest">
 <div class="container">
     <div ng-controller="rcmDialogTestController">
 
@@ -94,7 +94,7 @@
                         <p>Simple example with minimuim required data.</p>
                     </div>
 
-                    <button rcm-dialog-link="/modules/rcm-dialog/example-content.html"
+                    <button rcm-dialog-link="/vendor/rcm-dialog/docs/example-content.html"
                             rcm-dialog-title="Some Dialog Title"
                             rcm-dialog-strategy="rcmStandardDialog"
                             class="btn btn-default"
@@ -105,7 +105,7 @@
                     <div>
 
 <pre><code>    &lt;button class="btn btn-default"
-            rcm-dialog-link="/modules/rcm-dialog/example-content.html"
+            rcm-dialog-link="/vendor/rcm-dialog/docs/example-content.html"
             rcm-dialog-title="Some Dialog Title"
             rcm-dialog-strategy="rcmStandardDialog"
     &gt;
@@ -130,7 +130,7 @@
                         <p>NOTE: Some strategies may not support &quot;contentscope&quot; vars. </p>
                     </div>
 
-                    <button rcm-dialog-link="/modules/rcm-dialog/example-content.html"
+                    <button rcm-dialog-link="/vendor/rcm-dialog/docs/example-content.html"
                             rcm-dialog-id="someUniqueIdHere1"
                             rcm-dialog-title="Some Dialog Title"
                             rcm-dialog-strategy="rcmStandardDialog"
@@ -143,7 +143,7 @@
                     <div>
 
 <pre><code>    &lt;button class="btn btn-default"
-            rcm-dialog-link="/modules/rcm-dialog/example-content.html"
+            rcm-dialog-link="/vendor/rcm-dialog/docs/example-content.html"
             rcm-dialog-id="someUniqueIdHere1"
             rcm-dialog-title="Some Dialog Title"
             rcm-dialog-strategy="rcmStandardDialog"
@@ -239,7 +239,7 @@
                         <p>Example of the directive on an 'a' tag</p>
                     </div>
 
-                    <a rcm-dialog-link="/modules/rcm-dialog/example-blank-content.html"
+                    <a rcm-dialog-link="/vendor/rcm-dialog/docs/example-blank-content.html"
                        rcm-dialog-id="someUniqueIdHere2"
                        rcm-dialog-title="Some Dialog Title"
                        rcm-dialog-strategy="rcmBlankDialog"
@@ -252,7 +252,7 @@
                     <div>
 
 <pre><code>    &lt;a class="btn btn-default"
-        rcm-dialog-link="/modules/rcm-dialog/example-blank-content.html"
+        rcm-dialog-link="/vendor/rcm-dialog/docs/example-blank-content.html"
         rcm-dialog-id="someUniqueIdHere2"
         rcm-dialog-title="Some Dialog Title"
         rcm-dialog-strategy="rcmBlankDialog"
@@ -278,7 +278,7 @@
                         <p>NOTE: This strategy does NOT support &quot;contentscope&quot; vars. </p>
                     </div>
 
-                    <button rcm-dialog-link="/modules/rcm-dialog/example-content.html"
+                    <button rcm-dialog-link="/vendor/rcm-dialog/docs/example-content.html"
                             rcm-dialog-title="Some Dialog Title"
                             rcm-dialog-strategy="rcmBlankIframeDialog"
                             class="btn btn-default"
@@ -290,7 +290,7 @@
                     <div>
 
 <pre><code>    &lt;button class="btn btn-default"
-            rcm-dialog-link="/modules/rcm-dialog/example-content.html"
+            rcm-dialog-link="/vendor/rcm-dialog/docs/example-content.html"
             rcm-dialog-title="Some Dialog Title"
             rcm-dialog-strategy="rcmBlankIframeDialog"
     &gt;
@@ -313,7 +313,7 @@
                         <p>We allow the rcm-dialog-id to be auto generated</p>
                     </div>
 
-                    <button rcm-dialog-link="/modules/rcm-dialog/example-content.html"
+                    <button rcm-dialog-link="/vendor/rcm-dialog/docs/example-content.html"
                             rcm-dialog-title="Some Dialog Title"
                             rcm-dialog-strategy="rcmFormDialog"
                             class="btn btn-default"
@@ -325,7 +325,7 @@
                     <div>
 
 <pre><code>    &lt;button class="btn btn-default"
-            rcm-dialog-link="/modules/rcm-dialog/example-content.html"
+            rcm-dialog-link="/vendor/rcm-dialog/docs/example-content.html"
             rcm-dialog-title="Some Dialog Title"
             rcm-dialog-strategy="rcmFormDialog"
     &gt;

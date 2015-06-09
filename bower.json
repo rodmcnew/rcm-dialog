@@ -1,7 +1,7 @@
 {
   "name": "rcm-dialog",
   "homepage": "https://github.com/reliv/rcm-dialog",
-  "description": "Javascript dialog",
+  "description": "Javascript AngularJs dialog strategies for bootstrap",
   "keywords": [
     "javascipt",
     "dialog",
@@ -13,7 +13,8 @@
   "license": "BSD 2",
   "dependencies": {
     "angular": "1.*",
-    "bootstrap": "3.*"
+    "bootstrap": "3.*",
+    "rcm-js-lib": "0.*"
   },
   "devDependencies": {},
   "ignore": [

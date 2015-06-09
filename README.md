@@ -1,7 +1,7 @@
 RCM Dialog
 ===========
 
-Javascript Angular Dialog.
+Javascript AngularJs dialog strategies for bootstrap
 
 - Requires jQuery
 - Requires bootstrap.js
