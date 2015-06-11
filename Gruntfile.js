@@ -9,8 +9,7 @@ module.exports = function (grunt) {
                     options: {
                         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
                         mangle: false,
-                        sourceMap: true,
-                        sourceMapName: 'dist/<%= pkg.name %>.map'
+                        sourceMap: true
                     },
                     files: {
                         'dist/<%= pkg.name %>.min.js': [
