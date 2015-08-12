@@ -68,6 +68,7 @@ var RcmDialog = {
 
         // Compile cant be done if injector not defined
         if (!angular.element(dialogElm).injector()) {
+            console.warn('RcmDialog cannot compile data-rcm-dialog element dynmically, angular injector is undefined.');
             return
         }
 
