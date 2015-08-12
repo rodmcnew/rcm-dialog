@@ -66,6 +66,11 @@ var RcmDialog = {
         dialogElm = jQuery('<div data-rcm-dialog="true"></div>');
         jQuery('body').prepend(dialogElm);
 
+        // Compile cant be done if injector not defined
+        if (!angular.element(dialogElm).injector()) {
+            return
+        }
+
         angular.element(dialogElm).injector().invoke(
             function ($compile) {
                 var scope = angular.element(dialogElm).scope();
