@@ -371,11 +371,11 @@ angular.module(
             var rcmDialogElm = null;
 
             var modalTemplate = '<div class="modal fade"' +
-                'id="TEMP"' +
+                ' id="TEMP"' +
                     //'tabindex="-1"' + // This causes issues
-                'role="dialog"' +
-                'aria-labelledby="rcmDialogLabel"' +
-                'aria-hidden="true"></div>';
+                ' role="dialog"' +
+                ' aria-labelledby="rcmDialogLabel"' +
+                ' aria-hidden="true"></div>';
 
             var updateElm = function (dialog) {
 
