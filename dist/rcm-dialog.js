@@ -5,7 +5,7 @@
  *   - Bootstrap v3.3.2 (http://getbootstrap.com) bootstrap.js
  */
 var RcmDialog = {
-
+ 
     service: null,
 
     defaultStrategy: 'rcmBlankDialog',
