@@ -7,7 +7,7 @@
 var RcmDialog = {
 
     service: null,
-
+ 
     defaultStrategy: 'rcmBlankDialog',
 
     /**
