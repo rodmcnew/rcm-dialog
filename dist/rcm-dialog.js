@@ -95,22 +95,6 @@ var RcmDialog = {
     },
 
     /**
-     *
-     * @param id
-     * @param title
-     * @param url
-     * @param strategyName
-     * @param actions
-     * @param contentscope
-     */
-    buildNewDialog: function (id, title, url, strategyName, actions, contentscope) {
-
-        id = RcmDialog.buildId(id, url);
-        RcmDialog.removeDialog(id);
-        RcmDialog.buildDialog(id, title, url, strategyName, actions, contentscope);
-    },
-
-    /**
      * buildDialog
      * @param id
      * @param title
@@ -125,7 +109,8 @@ var RcmDialog = {
         id = RcmDialog.buildId(id, url);
 
         if (RcmDialog.hasDialog(id)) {
-            return RcmDialog.getDialog(id);
+            console.info('Duplicate RcmDialog id requested');
+            RcmDialog.removeDialog(id);
         }
 
         var dialog = new RcmDialog.dialog();
