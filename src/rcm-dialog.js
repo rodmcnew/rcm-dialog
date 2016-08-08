@@ -81,13 +81,48 @@ var RcmDialog = {
     },
 
     /**
-     * buildDialog
+     * buildId
+     * @param id
+     * @param url
+     * @returns {*}
      */
-    buildDialog: function (id, title, url, strategyName, actions, contentscope) {
+    buildId: function (id, url) {
 
         if (!id) {
             id = url;
         }
+        return id;
+    },
+
+    /**
+     *
+     * @param id
+     * @param title
+     * @param url
+     * @param strategyName
+     * @param actions
+     * @param contentscope
+     */
+    buildNewDialog: function (id, title, url, strategyName, actions, contentscope) {
+
+        id = RcmDialog.buildId(id, url);
+        RcmDialog.removeDialog(id);
+        RcmDialog.buildDialog(id, title, url, strategyName, actions, contentscope);
+    },
+
+    /**
+     * buildDialog
+     * @param id
+     * @param title
+     * @param url
+     * @param strategyName
+     * @param actions
+     * @param contentscope
+     * @returns {*}
+     */
+    buildDialog: function (id, title, url, strategyName, actions, contentscope) {
+
+        id = RcmDialog.buildId(id, url);
 
         if (RcmDialog.hasDialog(id)) {
             return RcmDialog.getDialog(id);
