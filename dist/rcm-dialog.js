@@ -1,5 +1,5 @@
 /**
- * <RcmDialog>
+ * RcmDialog
  *  requires:
  *   - rcmGuid
  *   - Bootstrap v3.3.2 (http://getbootstrap.com) bootstrap.js
@@ -85,6 +85,14 @@ var RcmDialog = {
      */
     buildDialog: function (id, title, url, strategyName, actions, contentscope) {
 
+        if (!id) {
+            id = url;
+        }
+
+        if(RcmDialog.hasDialog(id)) {
+            return RcmDialog.getDialog(id);
+        }
+
         var dialog = new RcmDialog.dialog();
 
         if (strategyName) {
@@ -93,14 +101,9 @@ var RcmDialog = {
             dialog.strategyName = new RcmDialog.defaultStrategy;
         }
 
-        if (id) {
-            dialog.id = id;
-        } else {
-            dialog.id = url;
-        }
-
         dialog.loading = true;
 
+        dialog.id = id;
         dialog.title = title;
         dialog.url = url;
 
@@ -344,7 +347,7 @@ var RcmDialog = {
 };
 
 /**
- *
+ * RcmDialog
  */
 angular.module(
     'RcmDialog',
@@ -359,11 +362,25 @@ angular.module(
             return RcmDialog;
         }
     ]
-)
+);
+
+/**
+ * Compile Elm if dynamically created
+ */
+angular.element(document).ready(
+    function () {
+        RcmDialog.buildDialogElement();
+    }
+);
+
+if (typeof rcm !== 'undefined') {
+    rcm.addAngularModule('RcmDialog');
+}
+
 /**
  * RcmDialog.rcmDialog
  */
-    .directive(
+angular.module('RcmDialog').directive(
     'rcmDialog',
     [
         '$compile',
@@ -435,8 +452,12 @@ angular.module(
             }
         }
     ]
-)
-    .directive(
+);
+
+/**
+ * RcmDialog.rcmDialogLink
+ */
+angular.module('RcmDialog').directive(
     'rcmDialogLink',
     [
         '$log',
@@ -508,20 +529,6 @@ angular.module(
         }
     ]
 );
-
-/**
- * Compile Elm if dynamically created
- */
-angular.element(document).ready(
-    function () {
-        RcmDialog.buildDialogElement();
-    }
-);
-
-if (typeof rcm !== 'undefined') {
-    rcm.addAngularModule('RcmDialog');
-}
-/** </RcmDialog> */
 
 /**
  * Get Module

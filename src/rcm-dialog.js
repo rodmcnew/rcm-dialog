@@ -1,5 +1,5 @@
 /**
- * <RcmDialog>
+ * RcmDialog
  *  requires:
  *   - rcmGuid
  *   - Bootstrap v3.3.2 (http://getbootstrap.com) bootstrap.js
@@ -85,6 +85,14 @@ var RcmDialog = {
      */
     buildDialog: function (id, title, url, strategyName, actions, contentscope) {
 
+        if (!id) {
+            id = url;
+        }
+
+        if(RcmDialog.hasDialog(id)) {
+            return RcmDialog.getDialog(id);
+        }
+
         var dialog = new RcmDialog.dialog();
 
         if (strategyName) {
@@ -93,14 +101,9 @@ var RcmDialog = {
             dialog.strategyName = new RcmDialog.defaultStrategy;
         }
 
-        if (id) {
-            dialog.id = id;
-        } else {
-            dialog.id = url;
-        }
-
         dialog.loading = true;
 
+        dialog.id = id;
         dialog.title = title;
         dialog.url = url;
 
@@ -342,183 +345,3 @@ var RcmDialog = {
         return (RcmDialog.dialogs[dialogId])
     }
 };
-
-/**
- *
- */
-angular.module(
-    'RcmDialog',
-    []
-)
-    .factory(
-    'rcmDialogService',
-    [
-        '$compile',
-        function ($compile) {
-
-            return RcmDialog;
-        }
-    ]
-)
-/**
- * RcmDialog.rcmDialog
- */
-    .directive(
-    'rcmDialog',
-    [
-        '$compile',
-        function ($compile) {
-
-            var rcmDialogElm = null;
-
-            var modalTemplate = '<div class="modal fade"' +
-                ' id="TEMP"' +
-                    //'tabindex="-1"' + // This causes issues
-                ' role="dialog"' +
-                ' aria-labelledby="rcmDialogLabel"' +
-                ' aria-hidden="true"></div>';
-
-            var updateElm = function (dialog) {
-
-                var id = null;
-                var newModal = null;
-                var newDirectiveStrat = null;
-
-                id = dialog.strategyName + ':' + dialog.id; //.replace(/(:|\.|\[|\])/g, "\\$1")
-
-                if (!dialog.elm) {
-
-                    newModal = jQuery(modalTemplate);
-                    newModal.attr('id', id);
-                    newDirectiveStrat = jQuery('<div ' + dialog.getDirectiveName() + '="' + dialog.id + '"></div>');
-                    newModal.append(newDirectiveStrat);
-
-                    newModal.modal(
-                        {
-                            show: false
-                        }
-                    );
-
-                    dialog.setElm(newModal);
-
-                    newModal.on(
-                        'show.bs.modal',
-                        function (event) {
-                            dialog.openState = 'opening';
-                            $compile(dialog.elm.contents())(dialog.elm.scope());
-                        }
-                    );
-
-                    rcmDialogElm.append(newModal);
-                }
-            };
-
-            RcmDialog.eventManager.on(
-                'dialog.open',
-                'rcmDialog',
-                function (dialog) {
-                    updateElm(dialog);
-                }
-            );
-
-            var thisCompile = function (tElement, tAttrs) {
-
-                return function (scope, elm, attrs, ctrl) {
-
-                    rcmDialogElm = elm;
-                };
-            };
-
-            return {
-                restrict: 'A',
-                compile: thisCompile
-            }
-        }
-    ]
-)
-    .directive(
-    'rcmDialogLink',
-    [
-        '$log',
-        function ($log) {
-
-            var thisLink = function (scope, elm, attrs, ctrl) {
-
-                var rcmDialogId = null;
-
-                if (attrs.rcmDialogId) {
-                    rcmDialogId = attrs.rcmDialogId;
-                } else {
-                    rcmDialogId = rcmGuid.generate();
-                }
-
-                if (RcmDialog.hasDialog(rcmDialogId)) {
-                    $log.warn('Duplicate dialog with id ' + rcmDialogId + ' has been created, some dialogs will not work correctly.');
-                }
-
-                var rcmDialogTitle = "Dialog";
-
-                if (attrs.rcmDialogTitle) {
-                    rcmDialogTitle = attrs.rcmDialogTitle;
-                }
-
-                // URL of content to load
-                var rcmDialogLink = null;
-                if (attrs.rcmDialogLink) {
-                    rcmDialogLink = attrs.rcmDialogLink;
-                }
-
-                var rcmDialogStrategy = 'rcmStandardDialog';
-                if (attrs.rcmDialogStrategy) {
-                    rcmDialogStrategy = attrs.rcmDialogStrategy;
-                }
-
-                var rcmDialogActions = null;
-
-                if (attrs.rcmDialogActions) {
-                    try {
-                        rcmDialogActions = scope.$eval(attrs.rcmDialogActions);
-
-                    } catch (e) {
-                        $log.warn('rcmDialogActions for dialog ' + rcmDialogId + ' format is invalid and was ignored.');
-                    }
-                }
-
-                var dialog = RcmDialog.buildDialog(
-                    rcmDialogId,
-                    rcmDialogTitle,
-                    rcmDialogLink,
-                    rcmDialogStrategy,
-                    rcmDialogActions,
-                    scope
-                );
-
-                jQuery(elm).click(
-                    function () {
-                        dialog.open();
-                    }
-                )
-            };
-
-            return {
-                restrict: 'A',
-                link: thisLink
-            }
-
-        }
-    ]
-);
-
-/**
- * Compile Elm if dynamically created
- */
-angular.element(document).ready(
-    function () {
-        RcmDialog.buildDialogElement();
-    }
-);
-
-if (typeof rcm !== 'undefined') {
-    rcm.addAngularModule('RcmDialog');
-}
-/** </RcmDialog> */
