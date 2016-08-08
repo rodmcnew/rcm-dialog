@@ -1,11 +1,11 @@
 /**
- * <RcmDialog>
+ * RcmDialog
  *  requires:
  *   - rcmGuid
  *   - Bootstrap v3.3.2 (http://getbootstrap.com) bootstrap.js
  */
 var RcmDialog = {
- 
+
     service: null,
 
     defaultStrategy: 'rcmBlankDialog',
@@ -81,9 +81,37 @@ var RcmDialog = {
     },
 
     /**
+     * buildId
+     * @param id
+     * @param url
+     * @returns {*}
+     */
+    buildId: function (id, url) {
+
+        if (!id) {
+            id = url;
+        }
+        return id;
+    },
+
+    /**
      * buildDialog
+     * @param id
+     * @param title
+     * @param url
+     * @param strategyName
+     * @param actions
+     * @param contentscope
+     * @returns {*}
      */
     buildDialog: function (id, title, url, strategyName, actions, contentscope) {
+
+        id = RcmDialog.buildId(id, url);
+
+        if (RcmDialog.hasDialog(id)) {
+            console.info('Duplicate RcmDialog id requested');
+            RcmDialog.removeDialog(id);
+        }
 
         var dialog = new RcmDialog.dialog();
 
@@ -93,14 +121,9 @@ var RcmDialog = {
             dialog.strategyName = new RcmDialog.defaultStrategy;
         }
 
-        if (id) {
-            dialog.id = id;
-        } else {
-            dialog.id = url;
-        }
-
         dialog.loading = true;
 
+        dialog.id = id;
         dialog.title = title;
         dialog.url = url;
 
@@ -250,6 +273,22 @@ var RcmDialog = {
         };
 
         /**
+         * If special action is used for close, we should use it
+         */
+        self.closeAction = function () {
+
+            if (self.actions.close) {
+                RcmDialog.eventManager.trigger(
+                    'dialog.close',
+                    self
+                );
+                if (self.elm && self.openState !== 'closed') {
+                    self.actions.close.method(self);
+                }
+            }
+        };
+
+        /**
          * close
          */
         self.close = function () {
@@ -259,11 +298,18 @@ var RcmDialog = {
                 self
             );
 
+            // Spam protection
             if (self.elm && self.openState !== 'closed') {
-
                 self.openState = 'close';
                 self.elm.modal('hide');
             }
+        };
+
+        /**
+         * remove
+         */
+        self.remove = function () {
+            RcmDialog.removeDialog(self.id)
         };
 
         /**
@@ -298,14 +344,9 @@ var RcmDialog = {
                     'hidden.bs.modal',
                     function (event) {
                         self.openState = 'closed';
-                        if (self.actions.close && self.actions.close.type == 'button') {
-                            self.actions.close.method(self);
-                        } else {
-                            self.close()
-                        }
-                        self.elm.remove();
-                        //scope.$destroy();
-                        self.elm = null;
+                        // The close action happens after closing
+                        self.closeAction();
+                        self.remove();
                     }
                 );
             }
@@ -317,7 +358,6 @@ var RcmDialog = {
      * @param dialog
      */
     addDialog: function (dialog) {
-
         RcmDialog.dialogs[dialog.id] = dialog;
     },
 
@@ -327,7 +367,6 @@ var RcmDialog = {
      * @returns {*}
      */
     getDialog: function (dialogId) {
-
         return RcmDialog.dialogs[dialogId];
     },
 
@@ -337,13 +376,24 @@ var RcmDialog = {
      * @returns bool
      */
     hasDialog: function (dialogId) {
-
         return (RcmDialog.dialogs[dialogId])
+    },
+
+    /**
+     * removeDialog
+     * @param dialogId
+     */
+    removeDialog: function (dialogId) {
+        RcmDialog.dialogs[dialogId].elm.remove();
+        //RcmDialog.dialogs[dialogId].elm.destroy();
+        //RcmDialog.dialogs[dialogId].scope.$destroy();
+        RcmDialog.dialogs[dialogId] = undefined;
+        delete RcmDialog.dialogs[dialogId];
     }
 };
 
 /**
- *
+ * RcmDialog
  */
 angular.module(
     'RcmDialog',
@@ -358,11 +408,25 @@ angular.module(
             return RcmDialog;
         }
     ]
-)
+);
+
+/**
+ * Compile Elm if dynamically created
+ */
+angular.element(document).ready(
+    function () {
+        RcmDialog.buildDialogElement();
+    }
+);
+
+if (typeof rcm !== 'undefined') {
+    rcm.addAngularModule('RcmDialog');
+}
+
 /**
  * RcmDialog.rcmDialog
  */
-    .directive(
+angular.module('RcmDialog').directive(
     'rcmDialog',
     [
         '$compile',
@@ -371,11 +435,11 @@ angular.module(
             var rcmDialogElm = null;
 
             var modalTemplate = '<div class="modal fade"' +
-                'id="TEMP"' +
+                ' id="TEMP"' +
                     //'tabindex="-1"' + // This causes issues
-                'role="dialog"' +
-                'aria-labelledby="rcmDialogLabel"' +
-                'aria-hidden="true"></div>';
+                ' role="dialog"' +
+                ' aria-labelledby="rcmDialogLabel"' +
+                ' aria-hidden="true"></div>';
 
             var updateElm = function (dialog) {
 
@@ -434,8 +498,12 @@ angular.module(
             }
         }
     ]
-)
-    .directive(
+);
+
+/**
+ * RcmDialog.rcmDialogLink
+ */
+angular.module('RcmDialog').directive(
     'rcmDialogLink',
     [
         '$log',
@@ -507,20 +575,6 @@ angular.module(
         }
     ]
 );
-
-/**
- * Compile Elm if dynamically created
- */
-angular.element(document).ready(
-    function () {
-        RcmDialog.buildDialogElement();
-    }
-);
-
-if (typeof rcm !== 'undefined') {
-    rcm.addAngularModule('RcmDialog');
-}
-/** </RcmDialog> */
 
 /**
  * Get Module

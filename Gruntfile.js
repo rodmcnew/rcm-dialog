@@ -1,5 +1,16 @@
 module.exports = function (grunt) {
 
+    var files = [
+        'src/rcm-dialog.js',
+        'src/rcm-dialog-module.js',
+        'src/rcm-dialog-directive.js',
+        'src/rcm-dialog-link-directive.js',
+        'src/strategy/rcm-blank-dialog.js',
+        'src/strategy/rcm-blank-iframe-dialog.js',
+        'src/strategy/rcm-form-dialog.js',
+        'src/strategy/rcm-standard-dialog.js'
+    ];
+
     // Project configuration.
     grunt.initConfig(
         {
@@ -12,13 +23,7 @@ module.exports = function (grunt) {
                         sourceMap: true
                     },
                     files: {
-                        'dist/<%= pkg.name %>.min.js': [
-                            'src/rcm-dialog.js',
-                            'src/strategy/rcm-blank-dialog.js',
-                            'src/strategy/rcm-blank-iframe-dialog.js',
-                            'src/strategy/rcm-form-dialog.js',
-                            'src/strategy/rcm-standard-dialog.js'
-                        ]
+                        'dist/<%= pkg.name %>.min.js': files
                     }
                 }
             },
@@ -26,13 +31,7 @@ module.exports = function (grunt) {
                 options: {
                 },
                 dist: {
-                    src: [
-                        'src/rcm-dialog.js',
-                        'src/strategy/rcm-blank-dialog.js',
-                        'src/strategy/rcm-blank-iframe-dialog.js',
-                        'src/strategy/rcm-form-dialog.js',
-                        'src/strategy/rcm-standard-dialog.js'
-                    ],
+                    src: files,
                     dest: 'dist/<%= pkg.name %>.js'
                 }
             },
