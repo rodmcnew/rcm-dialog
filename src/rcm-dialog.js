@@ -7,7 +7,7 @@
 var RcmDialog = {
 
     service: null,
- 
+
     defaultStrategy: 'rcmBlankDialog',
 
     /**
@@ -89,7 +89,7 @@ var RcmDialog = {
             id = url;
         }
 
-        if(RcmDialog.hasDialog(id)) {
+        if (RcmDialog.hasDialog(id)) {
             return RcmDialog.getDialog(id);
         }
 
@@ -253,6 +253,22 @@ var RcmDialog = {
         };
 
         /**
+         * If special action is used for close, we should use it
+         */
+        self.closeAction = function () {
+
+            if (self.actions.close) {
+                RcmDialog.eventManager.trigger(
+                    'dialog.close',
+                    self
+                );
+                if (self.elm && self.openState !== 'closed') {
+                    self.actions.close.method(self);
+                }
+            }
+        };
+
+        /**
          * close
          */
         self.close = function () {
@@ -262,11 +278,18 @@ var RcmDialog = {
                 self
             );
 
+            // Spam protection
             if (self.elm && self.openState !== 'closed') {
-
                 self.openState = 'close';
                 self.elm.modal('hide');
             }
+        };
+
+        /**
+         * remove
+         */
+        self.remove = function () {
+            RcmDialog.removeDialog(self.id)
         };
 
         /**
@@ -301,15 +324,9 @@ var RcmDialog = {
                     'hidden.bs.modal',
                     function (event) {
                         self.openState = 'closed';
-                        if (self.actions.close && self.actions.close.type == 'button') {
-                            self.actions.close.method(self);
-                        } else {
-                            self.close()
-                        }
-                        self.elm.remove();
-                        //self.elm.destroy();
-                        //scope.$destroy();
-                        self.elm = null;
+                        // The close action happens after closing
+                        self.closeAction();
+                        self.remove();
                     }
                 );
             }
@@ -321,7 +338,6 @@ var RcmDialog = {
      * @param dialog
      */
     addDialog: function (dialog) {
-
         RcmDialog.dialogs[dialog.id] = dialog;
     },
 
@@ -331,7 +347,6 @@ var RcmDialog = {
      * @returns {*}
      */
     getDialog: function (dialogId) {
-
         return RcmDialog.dialogs[dialogId];
     },
 
@@ -341,7 +356,18 @@ var RcmDialog = {
      * @returns bool
      */
     hasDialog: function (dialogId) {
-
         return (RcmDialog.dialogs[dialogId])
+    },
+
+    /**
+     * removeDialog
+     * @param dialogId
+     */
+    removeDialog: function (dialogId) {
+        RcmDialog.dialogs[dialogId].elm.remove();
+        //RcmDialog.dialogs[dialogId].elm.destroy();
+        //RcmDialog.dialogs[dialogId].scope.$destroy();
+        RcmDialog.dialogs[dialogId] = undefined;
+        delete RcmDialog.dialogs[dialogId];
     }
 };
