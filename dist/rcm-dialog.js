@@ -109,7 +109,7 @@ var RcmDialog = {
         id = RcmDialog.buildId(id, url);
 
         if (RcmDialog.hasDialog(id)) {
-            console.info('Duplicate RcmDialog id requested');
+            console.info('Duplicate RcmDialog id requested: ' + id);
             RcmDialog.removeDialog(id);
         }
 
