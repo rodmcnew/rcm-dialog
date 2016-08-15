@@ -384,7 +384,9 @@ var RcmDialog = {
      * @param dialogId
      */
     removeDialog: function (dialogId) {
-        RcmDialog.dialogs[dialogId].elm.remove();
+        if(RcmDialog.dialogs[dialogId].elm){
+            RcmDialog.dialogs[dialogId].elm.remove();
+        }
         //RcmDialog.dialogs[dialogId].elm.destroy();
         //RcmDialog.dialogs[dialogId].scope.$destroy();
         RcmDialog.dialogs[dialogId] = undefined;
