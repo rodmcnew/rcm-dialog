@@ -109,7 +109,6 @@ var RcmDialog = {
         id = RcmDialog.buildId(id, url);
 
         if (RcmDialog.hasDialog(id)) {
-            console.info('Duplicate RcmDialog id requested');
             RcmDialog.removeDialog(id);
         }
 
@@ -384,11 +383,14 @@ var RcmDialog = {
      * @param dialogId
      */
     removeDialog: function (dialogId) {
-        if(RcmDialog.dialogs[dialogId].elm){
-            RcmDialog.dialogs[dialogId].elm.remove();
+        if (!RcmDialog.dialogs[dialogId]) {
+            return;
         }
-        //RcmDialog.dialogs[dialogId].elm.destroy();
-        //RcmDialog.dialogs[dialogId].scope.$destroy();
+        if (RcmDialog.dialogs[dialogId].elm) {
+            RcmDialog.dialogs[dialogId].elm.remove();
+            //RcmDialog.dialogs[dialogId].elm.destroy();
+            //RcmDialog.dialogs[dialogId].scope.$destroy();
+        }
         RcmDialog.dialogs[dialogId] = undefined;
         delete RcmDialog.dialogs[dialogId];
     }
